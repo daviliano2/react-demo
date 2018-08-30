@@ -2,11 +2,11 @@ export function formatPrice(cents) {
   return (cents / 100).toLocaleString("en-US", {
     style: "currency",
     currency: "USD"
-  });
+  })
 }
 
 export function rando(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[Math.floor(Math.random() * arr.length)]
 }
 
 export function slugify(text) {
@@ -17,7 +17,7 @@ export function slugify(text) {
     .replace(/[^\w-]+/g, "")
     .replace(/--+/g, "-")
     .replace(/^-+/, "")
-    .replace(/-+$/, "");
+    .replace(/-+$/, "")
 }
 
 export function getFunName() {
@@ -58,7 +58,7 @@ export function getFunName() {
     "thoughtless",
     "uptight",
     "worried"
-  ];
+  ]
 
   const nouns = [
     "women",
@@ -91,7 +91,7 @@ export function getFunName() {
     "phenomena",
     "criteria",
     "data"
-  ];
+  ]
 
-  return `${rando(adjectives)}-${rando(adjectives)}-${rando(nouns)}`;
+  return `${rando(adjectives)}-${rando(adjectives)}-${rando(nouns)}`
 }
