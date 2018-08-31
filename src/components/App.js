@@ -2,6 +2,8 @@ import React from "react"
 import Header from "./Header"
 import Order from "./Order"
 import Inventory from "./Inventory"
+import Fish from "./Fish"
+import base from '../base'
 import sampleFishes from "../sample-fishes"
 
 class App extends React.Component {
@@ -14,6 +16,24 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { params } = this.props.match
+    // Here we sync the firebase DB with our state. We give the route to the object, 
+    // in this case is the store name in the URL and the object (fishes)
+    this.ref = base.syncState(`${params.storeId}/fishes`, {
+      context: this,
+      state: 'fishes'
+    })
+  }
+
+  componentWillUnmount() {
+    base.removeBinding(this.ref)
+  }
+
+  loadSampleFishes = () => {
+    this.setState({ fishes: sampleFishes })
+  }
+
   addFish = fish => {
     // copy the state
     const fishes = { ...this.state.fishes }
@@ -23,8 +43,10 @@ class App extends React.Component {
     this.setState({ fishes })
   }
 
-  loadSampleFishes = () => {
-    this.setState({ fishes: sampleFishes })
+  addToOrder = key => {
+    const order = { ...this.state.order }
+    order[key] = order[key] + 1 || 1
+    this.setState({ order })
   }
 
   render() {
@@ -32,8 +54,18 @@ class App extends React.Component {
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
+          <ul className="fishes">
+            {Object.keys(this.state.fishes).map(key => (
+              <Fish
+                key={key}
+                index={key}
+                details={this.state.fishes[key]}
+                addToOrder={this.addToOrder}
+              />
+            ))}
+          </ul>
         </div>
-        <Order />
+        <Order fishes={this.state.fishes} order={this.state.order} />
         <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes} />
       </div>
     )
